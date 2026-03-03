@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oxy - Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg1:#050816;
+    --bg2:#0a1124;
+    --glass:rgba(255,255,255,0.04);
+    --border:rgba(255,255,255,0.08);
+    --blue:#5b8cff;
+    --text:#e6edf3;
+    --muted:#9aa4b2;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(140deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    overflow:hidden;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+.card{
+    width:900px;
+    display:flex;
+    gap:40px;
+    padding:50px;
+    background:var(--glass);
+    backdrop-filter:blur(25px);
+    border:1px solid var(--border);
+    border-radius:22px;
+    position:relative;
+    z-index:1;
+}
+
+.avatar-wrapper{
+    position:relative;
+    width:140px;
+    height:140px;
+}
+
+.avatar{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid var(--blue);
+    box-shadow:0 0 30px rgba(91,140,255,0.4);
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.status{
+    position:absolute;
+    bottom:0;
+    right:0;
+    width:26px;
+    height:26px;
+    background:#22c55e;
+    border-radius:50%;
+    border:4px solid #0a1124;
+}
+
+.content{
+    flex:1;
+}
+
+.content h1{
+    font-size:38px;
+    margin-bottom:8px;
+}
+
+.content h1 span{
+    color:var(--blue);
+}
+
+.role{
+    color:var(--blue);
+    margin-bottom:20px;
+    font-weight:500;
+}
+
+.content p{
+    color:var(--muted);
+    line-height:1.7;
+    margin-bottom:25px;
+}
+
+.socials{
+    display:flex;
+    gap:15px;
+    margin-bottom:10px;
+}
+
+.socials a{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--border);
+    transition:0.3s;
+}
+
+.socials a:hover{
+    background:var(--blue);
+    box-shadow:0 0 20px var(--blue);
+    transform:translateY(-3px);
+}
+
+.socials svg{
+    width:24px;
+    height:24px;
+    fill:white;
+}
+
+.music-player {
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    z-index:10;
+}
+
+.music-toggle {
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:var(--glass);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    color:white;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.3s;
+}
+
+.music-toggle:hover {
+    background:var(--blue);
+    box-shadow:0 0 20px var(--blue);
+    transform:scale(1.1);
+}
+
+.music-toggle svg {
+    width:20px;
+    height:20px;
+    fill:white;
+}
+</style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+
+<!-- Müzik Player -->
+<div class="music-player">
+    <button class="music-toggle" id="musicToggle">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </button>
+</div>
+
+<!-- YouTube IFrame Player API -->
+<div id="youtube-player" style="display:none;"></div>
+
+<div class="card">
+    <div class="avatar-wrapper">
+        <div class="avatar">
+            <img src="https://cdn.discordapp.com/avatars/1426877563451736158/ecbce18c7bc8024ae037d5493d913897.webp?size=1024" alt="avatar">
+        </div>
+        <div class="status"></div>
+    </div>
+
+    <div class="content">
+        <h1>Hey I'm <span>Oxy</span></h1>
+        <div class="role">Developer • Creator</div>
+
+        <p>
+            Modern ve performans odaklı sistemler geliştiriyorum. 
+            Discord botları, web uygulamaları ve otomasyon çözümleri.
+        </p>
+
+        <div class="socials">
+            <!-- Discord -->
+            <a href="https://discord.com/users/1426877563451736158" target="_blank" title="Discord">
+                <svg viewBox="0 0 127.14 96.36">
+                    <path d="M107.7 8.07A105.15 105.15 0 0081.47 0a72.06 72.06 0 00-3.36 6.86 97.68 97.68 0 00-29.1 0A72.37 72.37 0 0045.65 0 105.89 105.89 0 0019.39 8.09C2.79 32.65-1.71 56.6.51 80.21a105.73 105.73 0 0032.17 16.15 77.7 77.7 0 006.89-11.3 68.42 68.42 0 01-10.85-5.18c.91-.69 1.8-1.41 2.66-2.16 20.9 9.72 43.6 9.72 64.25 0 .87.75 1.76 1.47 2.66 2.16a68.68 68.68 0 01-10.87 5.19 77.25 77.25 0 006.89 11.28A105.25 105.25 0 00126.63 80c2.6-27.69-4.47-51.47-18.93-71.93zM42.45 65.69c-6.27 0-11.4-5.74-11.4-12.81s5-12.81 11.4-12.81 11.46 5.74 11.4 12.81c0 7.07-5.06 12.81-11.4 12.81zm42.24 0c-6.27 0-11.4-5.74-11.4-12.81s5-12.81 11.4-12.81 11.46 5.74 11.4 12.81c0 7.07-5.06 12.81-11.4 12.81z"/>
+                </svg>
+            </a>
+
+            <!-- GitHub -->
+            <a href="https://github.com/oxy4ff" target="_blank" title="GitHub">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 0C5.37 0 0 5.373 0 12a12 12 0 008.205 11.385c.6.113.82-.258.82-.577v-2.165c-3.338.726-4.033-1.415-4.033-1.415-.546-1.387-1.333-1.757-1.333-1.757-1.09-.744.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.833 2.807 1.304 3.492.997.108-.775.418-1.304.76-1.603-2.665-.305-5.466-1.332-5.466-5.93 0-1.311.47-2.382 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 016.003 0c2.292-1.552 3.299-1.23 3.299-1.23.654 1.652.242 2.873.118 3.176.77.839 1.235 1.91 1.235 3.221 0 4.61-2.804 5.624-5.476 5.921.43.372.814 1.103.814 2.222v3.293c0 .322.218.694.825.576A12.006 12.006 0 0024 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+
+window.addEventListener("resize",()=>{
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+});
+
+let mouse = {x:w/2,y:h/2};
+
+window.addEventListener("mousemove",(e)=>{
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+class Particle{
+    constructor(){ this.reset(); }
+    reset(){
+        this.x=Math.random()*w;
+        this.y=Math.random()*h;
+        this.size=Math.random()*3+1;
+        this.speedY=Math.random()*1+0.5;
+        this.speedX=Math.random()*0.5-0.25;
+        this.opacity=Math.random()*0.5+0.3;
+    }
+    update(){
+        this.y+=this.speedY;
+        this.x+=this.speedX;
+
+        const dx=mouse.x-this.x;
+        const dy=mouse.y-this.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<120){
+            this.x-=dx*0.01;
+            this.y-=dy*0.01;
+        }
+
+        if(this.y>h){
+            this.reset();
+            this.y=0;
+        }
+    }
+    draw(){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fillStyle="rgba(255,255,255,"+this.opacity+")";
+        ctx.fill();
+    }
+}
+
+const particles=[];
+for(let i=0;i<120;i++){ particles.push(new Particle()); }
+
+function animate(){
+    ctx.clearRect(0,0,w,h);
+    for(let p of particles){ p.update(); p.draw(); }
+    requestAnimationFrame(animate);
+}
+animate();
+
+// YouTube Müzik Player
+let player;
+let isPlaying = false;
+
+// YouTube API scriptini yükle
+const tag = document.createElement('script');
+tag.src = 'https://www.youtube.com/iframe_api';
+const firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// YouTube player hazır olduğunda
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: 'GPYG4MQkU2s',
+        playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'disablekb': 1,
+            'enablejsapi': 1,
+            'fs': 0,
+            'loop': 1,
+            'modestbranding': 1,
+            'playsinline': 1,
+            'rel': 0,
+            'playlist': 'GPYG4MQkU2s' 
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    // Otomatik oynat
+    event.target.playVideo();
+    isPlaying = true;
+    musicToggle.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+}
+
+function onPlayerStateChange(event) {
+    // Video bittiğinde tekrar başlat
+    if (event.data === YT.PlayerState.ENDED) {
+        event.target.playVideo();
+    }
+}
+
+// Müzik toggle butonu
+const musicToggle = document.getElementById('musicToggle');
+musicToggle.addEventListener('click', () => {
+    if (isPlaying) {
+        player.pauseVideo();
+        musicToggle.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+    } else {
+        player.playVideo();
+        musicToggle.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+    }
+    isPlaying = !isPlaying;
+});
+
+// Sayfa yüklendiğinde otomatik başlat
+window.addEventListener('load', () => {
+    // YouTube API hazır değilse manuel dene
+    setTimeout(() => {
+        if (player && player.playVideo) {
+            player.playVideo();
+            isPlaying = true;
+            musicToggle.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+        }
+    }, 2000);
+});
+</script>
+
+</body>
+</html>
